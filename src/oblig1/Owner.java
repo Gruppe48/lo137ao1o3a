@@ -12,6 +12,11 @@ public abstract class Owner {
     adress = a;
     car = c;
   }
+  
+  @Override
+  public String toString() {
+    return "Eier:\n " + "Navn: " + name + "\nAdresse: " + adress + "\n" + car.toString();
+  }
 }
 
 class Private extends Owner {
@@ -22,6 +27,11 @@ class Private extends Owner {
     ssn = s;
   }
   
+  @Override
+  public String toString() {
+    return super.toString() + "Personnr: " + ssn + car.toString();
+  }
+  
 }
 
 class Firm extends Owner {
@@ -30,6 +40,12 @@ class Firm extends Owner {
   public Firm (String n, String a, Car c, int cn ) {
     super (n,a,c);
     cnbr = cn;
+  }
+  
+  @Override
+  public String toString() {
+    return super.toString() + "Personnr: " + cnbr + car.toString();
+    
   }
 }
 
