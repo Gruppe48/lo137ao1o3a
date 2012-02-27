@@ -5,6 +5,7 @@ public abstract class Owner {
   String name;
   String adress;
   Car car;
+  Owner next;
   
   public Owner(String n, String a, Car c) {
     name = n;
