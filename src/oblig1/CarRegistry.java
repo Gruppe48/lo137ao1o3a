@@ -2,35 +2,59 @@
 package oblig1;
 
 public class CarRegistry {
-  Car Fcar;
+  Car fCar; //First Car
   
   CarRegistry() {
-    Fcar = null;
+    fCar = null;
   }
   
   public void RegCar (Car c) {
-    if (Fcar == null) {    
-      Fcar = c;
+    if (fCar == null) {    
+      fCar = c;
     }  
     else {
-      Car Rcar = Fcar;
-      while ()
+      Car rCar = fCar; //Runner
+      while (rCar.next != null) {
+        rCar = rCar.next;
+      }
+      rCar.next = c;
+    }
       
     }
     
+  
+  public String PrintReg() {
+    String res = "";
+    Car rCar = fCar;
     
+    while (rCar != null) {
+      res += rCar.toString();
+      rCar = rCar.next;
+    }
+    
+    if (!res.equals("")) {
+      return res;
+    }
+    else {
+      return "Ingen biler registert";
+    }
   }
   
-  public void PrintReg() {
+  
+  public String RemoveCar(int regNbr) {
+    Car rCar = fCar;
     
+    while (rCar.next != null) {
+      if (rCar.next.regNbr == regNbr) {
+        rCar = null;
+        return "Bilen med regNr " + regNbr + " ble fjernet\n";
+      }
+      rCar = rCar.next;
+    }
+    return "Fant ikke bilen med regNr " + regNbr + " i registeret\n"; 
   }
   
-  public void RemoveCar() {
-    
-  }
-  
-  public void FindOwner() {
-    
+  public void FindOwner(Owner owner) {
   }
   
   public void ChangeOwner() {
