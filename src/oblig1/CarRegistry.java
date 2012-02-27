@@ -2,8 +2,22 @@
 package oblig1;
 
 public class CarRegistry {
+  Car Fcar;
   
-  public void RegCar () {
+  CarRegistry() {
+    Fcar = null;
+  }
+  
+  public void RegCar (Car c) {
+    if (Fcar == null) {    
+      Fcar = c;
+    }  
+    else {
+      Car Rcar = Fcar;
+      while ()
+      
+    }
+    
     
   }
   
@@ -20,6 +34,10 @@ public class CarRegistry {
   }
   
   public void ChangeOwner() {
+    
+  }
+  
+  public void RegOwner() {
     
   }
 }
