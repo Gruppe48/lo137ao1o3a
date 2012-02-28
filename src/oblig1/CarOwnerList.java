@@ -63,12 +63,12 @@ public class CarOwnerList {
     return true;
   }
   
-  public boolean RemoveOwner(int s) {
+  public boolean RemoveOwner(int ownerID) {
     if (fOwn == null)
       return false;
     
     Owner rOwn = fOwn;
-    while(rOwn.next.getOwnerID() != s) {
+    while(rOwn.next.getOwnerID() != ownerID) {
       if (rOwn.next.next == null)
         return false;
       rOwn = rOwn.next;
