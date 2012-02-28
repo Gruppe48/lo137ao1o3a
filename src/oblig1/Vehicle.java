@@ -7,11 +7,11 @@ public class Vehicle {
   private String model; // Model, obviously.
   private int regyear; // First time registered.
   
-  public Vehicle (String rN, String m, String mo, int ry) {
-    regNbr = rN;
-    make = m;
-    model = mo;
-    regyear = ry;
+  public Vehicle (String regNumber, String make, String model, int regYear) {
+    this.regNbr = regNumber;
+    this.make = make;
+    this.model = model;
+    this.regyear = regYear;
   }
   
   public String getMake() {

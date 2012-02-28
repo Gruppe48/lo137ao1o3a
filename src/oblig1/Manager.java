@@ -9,11 +9,11 @@ import javax.swing.*;
 
 public class Manager extends JFrame {
   JTextField txtSsn, txtFirm, txtOName, txtOAddr;
-  JTextField txtCarRegNr, txtCarMake, txtCarModel, txtCarRY;
+  JTextField txtCarRegNr, txtCarMake, txtCarModel, txtCarRegYear;
   JButton regCar, delCar, regPOwner, regFOwner, delOwner, changeOwner, showAll, showOwner;
   JTextArea display;
   
-  CarOwnerList registry = new CarOwnerList();
+  OwnerList registry = new OwnerList();
   
   public Manager() {
     super("BilPark");
@@ -27,7 +27,7 @@ public class Manager extends JFrame {
     txtCarRegNr = new JTextField(10);
     txtCarMake  = new JTextField(10);
     txtCarModel = new JTextField(10);
-    txtCarRY    = new JTextField(4);
+    txtCarRegYear    = new JTextField(4);
     
     // Create Buttons
     regCar      = new JButton("Reg bil");
@@ -75,7 +75,7 @@ public class Manager extends JFrame {
     c.add(new JLabel("Bilmodell:"));
     c.add(txtCarModel);
     c.add(new JLabel("Registreringsår"));
-    c.add(txtCarRY);
+    c.add(txtCarRegYear);
     
     // Add Buttons
     c.add(regCar);
@@ -99,15 +99,15 @@ public class Manager extends JFrame {
     public void actionPerformed(ActionEvent e) {
       
       if(e.getSource() == regCar)
-        regCar();
+        registerVehicle();
       else if (e.getSource() == delCar)
-        delCar();
+        deleteVehicle();
       else if (e.getSource() == regPOwner)
-        regPOwner();
+        registerPerson();
       else if (e.getSource() == regFOwner)
-        regFOwner();
+        registerCompany();
       else if (e.getSource() == delOwner)
-        delOwner();
+        deleteOwner();
       else if (e.getSource() == changeOwner)
         changeOwner();
       else if (e.getSource() == showOwner)
@@ -117,29 +117,44 @@ public class Manager extends JFrame {
     }
   }
   
-  public void regCar() {
-    
+  public void registerVehicle() {
+    try {
+      String regNumber = txtCarRegNr.getText();
+      String make = txtCarMake.getText();
+      String model = txtCarModel.getText();
+      int regYear = Integer.parseInt(txtCarRegYear.getText());
+     // registry.registerVehicle(vehicle);
+    } catch (NumberFormatException e) {
+    }
+
   }
   
-  public void delCar() {
+  public void deleteVehicle() {
     String regNr = txtCarRegNr.getText();
     
-    if(registry.RemoveCar(regNr))
-      display.setText("Bilen: " + regNr + " er nå slettet");
+    if(registry.removeVehicle(regNr))
+      display.setText("Bilen: " + regNr + " er nå slettet\n");
     else
-      display.setText("Bilden: " + regNr + " kan ikke slettes."
+      display.setText("Bilen: " + regNr + " kan ikke slettes."
               + "Enten finnes den ikke, eller så er det noen som eier den");
   }
   
-  public void regPOwner() {
-    Person pOwner = new Person(txtOName.getText(), txtOAddr.getText(), null, txtSsn.getText());
+  // * Register private owner
+  public void registerPerson() {
+    try {
+      int ssn = Integer.parseInt(txtSsn.getText());
+      Person pOwner = new Person(txtOName.getText(), txtOAddr.getText(), null, ssn);
+    } catch (NumberFormatException e) {
+      
+    }
   }
   
-  public void regFOwner() {
+  // * Register company owner
+  public void registerCompany() {
     
   }
   
-  public void delOwner() {
+  public void deleteOwner() {
     
   }
   
@@ -148,11 +163,11 @@ public class Manager extends JFrame {
   }
   
   public void showOwner() {
-    display.setText(registry.FindOwner(txtCarRegNr.getText()));
+    display.setText(registry.findOwner(txtCarRegNr.getText()));
   }
   
   public void showAll() {
-    display.setText(registry.PrintRegistry());
+    display.setText(registry.printRegistry());
   }
   
 }

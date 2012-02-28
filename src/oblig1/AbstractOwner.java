@@ -5,7 +5,8 @@ public abstract class AbstractOwner {
   protected String name;
   protected String address;
   protected Vehicle car;
-  protected AbstractOwner next; // TODO: WTF IS THIS FOR?
+  protected AbstractOwner next;
+  protected AbstractOwner previous;
   
   public AbstractOwner(String n, String a, Vehicle c) {
     name = n;
@@ -43,6 +44,14 @@ public abstract class AbstractOwner {
 
   public void setNext(AbstractOwner next) {
     this.next = next;
+  }
+  
+  public AbstractOwner getPrevious() {
+    return previous;
+  }
+
+  public void setPrevious(AbstractOwner previousOwner) {
+    this.previous = previousOwner;
   }
   
   abstract int getOwnerID();

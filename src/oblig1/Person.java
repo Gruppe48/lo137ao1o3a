@@ -12,9 +12,9 @@ package oblig1;
 class Person extends AbstractOwner {
   protected int ssn; //Social Security number 
   
-  public Person (String n, String a, Vehicle c, int s) {
-    super (n,a,c);
-    ssn = s;
+  public Person (String name, String address, Vehicle car, int ssn) {
+    super (name,address,car);
+    this.ssn = ssn;
   }
   
   @Override
