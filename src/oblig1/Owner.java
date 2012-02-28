@@ -49,6 +49,7 @@ class Firm extends Owner {
     cnbr = cn;
   }
   
+  @Override
   public int getOwnerID() {
     return cnbr;
   }
