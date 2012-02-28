@@ -3,13 +3,13 @@ package oblig1;
 
 public abstract class Owner {
   protected String name;
-  protected String adress;
+  protected String address;
   protected Car car;
-  protected Owner next;
+  protected Owner next; // TODO: WTF IS THIS FOR?
   
   public Owner(String n, String a, Car c) {
     name = n;
-    adress = a;
+    address = a;
     car = c;
   }
   
@@ -17,7 +17,7 @@ public abstract class Owner {
   
   @Override
   public String toString() {
-    return "Eier:\n " + "Navn: " + name + "\nAdresse: " + adress + "\n" + car.toString();
+    return "Eier:\n " + "Navn: " + name + "\nAdresse: " + address + "\n" + car.toString();
   }
 }
 
@@ -49,6 +49,7 @@ class Firm extends Owner {
     cnbr = cn;
   }
   
+  @Override
   public int getOwnerID() {
     return cnbr;
   }
