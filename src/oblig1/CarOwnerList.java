@@ -4,20 +4,20 @@ package oblig1;
 
 public class CarOwnerList {
   
-  private Owner fOwn;
+  private AbstractOwner fOwn;
   
   public CarOwnerList() {
     fOwn = null;
   }
   
-  public void RegNewOwner(Owner owner) {
+  public void RegNewOwner(AbstractOwner owner) {
     
     if (fOwn == null) {
       fOwn = owner;
     }
     
     else {
-      Owner rOwn = fOwn;
+      AbstractOwner rOwn = fOwn;
       while (rOwn.next != null) {
         rOwn = rOwn.next;
       }
@@ -32,7 +32,7 @@ public class CarOwnerList {
   
   public String PrintRegistry() {
     String res = "";
-    Owner rOwn = fOwn;
+    AbstractOwner rOwn = fOwn;
     
     while (rOwn != null) {
       res += rOwn.toString() + "\n";
@@ -53,7 +53,7 @@ public class CarOwnerList {
     if (fOwn == null)
       return false;
     
-    Owner rOwn = fOwn;
+    AbstractOwner rOwn = fOwn;
     while(!rOwn.car.getRegNr().equals(regNr)) {
       if (rOwn.next == null)
         return false;
@@ -67,7 +67,7 @@ public class CarOwnerList {
     if (fOwn == null)
       return false;
     
-    Owner rOwn = fOwn;
+    AbstractOwner rOwn = fOwn;
     while(rOwn.next.getOwnerID() != ownerID) {
       if (rOwn.next.next == null)
         return false;
@@ -84,7 +84,7 @@ public class CarOwnerList {
     if (fOwn == null)
       return "Ingen eier en bil med registreringsnummeret: " + regNr;
     
-    Owner rOwn = fOwn;
+    AbstractOwner rOwn = fOwn;
     while(!rOwn.car.getRegNr().equals(regNr)) {
       if (rOwn.next == null)
         return "Ingen eier en bil med registreringsnummeret: " + regNr;

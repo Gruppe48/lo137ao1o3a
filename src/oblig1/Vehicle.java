@@ -1,13 +1,13 @@
 
 package oblig1;
 
-public class Car {
+public class Vehicle {
   private String regNbr;  // registration number
-  private String make; // Car make (Toyota, Ford, and so on)
+  private String make; // Vehicle make (Toyota, Ford, and so on)
   private String model; // Model, obviously.
   private int regyear; // First time registered.
   
-  public Car (String rN, String m, String mo, int ry) {
+  public Vehicle (String rN, String m, String mo, int ry) {
     regNbr = rN;
     make = m;
     model = mo;
