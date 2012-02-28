@@ -12,6 +12,38 @@ public abstract class AbstractOwner {
     address = a;
     car = c;
   }
+
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+  public Vehicle getCar() {
+    return car;
+  }
+
+  public void setCar(Vehicle car) {
+    this.car = car;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public AbstractOwner getNext() {
+    return next;
+  }
+
+  public void setNext(AbstractOwner next) {
+    this.next = next;
+  }
   
   abstract int getOwnerID();
   
