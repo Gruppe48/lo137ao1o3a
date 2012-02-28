@@ -49,16 +49,48 @@ public class CarOwnerList {
     
   }
   
-  public void RemoveCar() {
+  public boolean RemoveCar(String regNr) {
+    if (fOwn == null)
+      return false;
     
+    Owner rOwn = fOwn;
+    while(!rOwn.car.getRegNr().equals(regNr)) {
+      if (rOwn.next == null)
+        return false;
+      rOwn = rOwn.next;
+    }
+    rOwn.car = null;
+    return true;
   }
   
-  public void RemoveOwner() {
+  public boolean RemoveOwner(int s) {
+    if (fOwn == null)
+      return false;
     
+    Owner rOwn = fOwn;
+    while(rOwn.next.getOwnerID() != s) {
+      if (rOwn.next.next == null)
+        return false;
+      rOwn = rOwn.next;
+    }
+    if(rOwn.next.car == null) {
+      rOwn.next = rOwn.next.next;
+      return true;
+    }
+    return false;
   }
   
-  public void FindOwner() {
+  public String FindOwner(String regNr) {
+    if (fOwn == null)
+      return "Ingen eier en bil med registreringsnummeret: " + regNr;
     
+    Owner rOwn = fOwn;
+    while(!rOwn.car.getRegNr().equals(regNr)) {
+      if (rOwn.next == null)
+        return "Ingen eier en bil med registreringsnummeret: " + regNr;
+      rOwn = rOwn.next;
+    }
+    return rOwn.toString();
   }
   
 }
