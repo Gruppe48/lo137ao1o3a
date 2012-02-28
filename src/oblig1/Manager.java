@@ -13,6 +13,8 @@ public class Manager extends JFrame {
   JButton regCar, delCar, regPOwner, regFOwner, delOwner, changeOwner, showAll, showOwner;
   JTextArea display;
   
+  CarOwnerList registry = new CarOwnerList();
+  
   public Manager() {
     super("BilPark");
     
@@ -120,11 +122,17 @@ public class Manager extends JFrame {
   }
   
   public void delCar() {
+    String regNr = txtCarRegNr.getText();
     
+    if(registry.RemoveCar(regNr))
+      display.setText("Bilen: " + regNr + " er nå slettet");
+    else
+      display.setText("Bilden: " + regNr + " kan ikke slettes."
+              + "Enten finnes den ikke, eller så er det noen som eier den");
   }
   
   public void regPOwner() {
-    
+    Person pOwner = new Person(txtOName.getText(), txtOAddr.getText(), null, txtSsn.getText());
   }
   
   public void regFOwner() {
@@ -140,11 +148,11 @@ public class Manager extends JFrame {
   }
   
   public void showOwner() {
-    
+    display.setText(registry.FindOwner(txtCarRegNr.getText()));
   }
   
   public void showAll() {
-    
+    display.setText(registry.PrintRegistry());
   }
   
 }
