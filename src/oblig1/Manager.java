@@ -10,7 +10,7 @@ import javax.swing.*;
 public class Manager extends JFrame {
   JTextField txtSsn, txtFirm, txtOName, txtOAddr;
   JTextField txtCarRegNr, txtCarMake, txtCarModel, txtCarRegYear;
-  JButton regCar, delCar, regPOwner, regFOwner, delOwner, changeOwner, showAll, showOwner;
+  JButton regCPrivate,regCFirm, delCar, regPOwner, regFOwner, delOwner, changeOwner, showAll, showOwner;
   JTextArea display;
   
   OwnerList registry = new OwnerList();
@@ -30,7 +30,8 @@ public class Manager extends JFrame {
     txtCarRegYear    = new JTextField(4);
     
     // Create Buttons
-    regCar      = new JButton("Reg bil");
+    regCPrivate = new JButton("Reg priv. bil");
+    regCFirm    = new JButton("Reg firmabil");
     delCar      = new JButton("Slett bil");
     regPOwner   = new JButton("Reg priv.eier");
     regFOwner   = new JButton("Reg firmaeier");
@@ -46,7 +47,8 @@ public class Manager extends JFrame {
     
     // Add ActionListeners
     BtnListener listener = new BtnListener();
-    regCar.addActionListener(listener);
+    regCPrivate.addActionListener(listener);
+    regCFirm.addActionListener(listener);
     delCar.addActionListener(listener);
     regPOwner.addActionListener(listener);
     regFOwner.addActionListener(listener);
@@ -78,7 +80,8 @@ public class Manager extends JFrame {
     c.add(txtCarRegYear);
     
     // Add Buttons
-    c.add(regCar);
+    c.add(regCPrivate);
+    c.add(regCFirm);
     c.add(delCar);
     c.add(regPOwner);
     c.add(regFOwner);
@@ -98,8 +101,10 @@ public class Manager extends JFrame {
     @Override
     public void actionPerformed(ActionEvent e) {
       
-      if(e.getSource() == regCar)
-        registerVehicle();
+      if(e.getSource() == regCPrivate)
+        registerVehiclePrivate();
+      else if (e.getSource() == regCFirm)
+        registerVehicleCompany();
       else if (e.getSource() == delCar)
         deleteVehicle();
       else if (e.getSource() == regPOwner)
@@ -117,13 +122,33 @@ public class Manager extends JFrame {
     }
   }
   
-  public void registerVehicle() {
+  public void registerVehiclePrivate() {
     try {
       String regNumber = txtCarRegNr.getText();
       String make = txtCarMake.getText();
       String model = txtCarModel.getText();
       int regYear = Integer.parseInt(txtCarRegYear.getText());
-     // registry.registerVehicle(vehicle);
+      int ssn = Integer.parseInt(txtSsn.getText());
+      
+      Vehicle v = new Vehicle(regNumber,make,model,regYear);
+      registry.registerVehicle(ssn, v);
+      
+    } catch (NumberFormatException e) {
+    }
+
+  }
+  
+  public void registerVehicleCompany() {
+    try {
+      String regNumber = txtCarRegNr.getText();
+      String make = txtCarMake.getText();
+      String model = txtCarModel.getText();
+      int regYear = Integer.parseInt(txtCarRegYear.getText());
+      int firmID = Integer.parseInt(txtFirm.getText());
+      
+      Vehicle v = new Vehicle(regNumber,make,model,regYear);
+      registry.registerVehicle(ssn, v);
+      
     } catch (NumberFormatException e) {
     }
 
@@ -144,6 +169,8 @@ public class Manager extends JFrame {
     try {
       int ssn = Integer.parseInt(txtSsn.getText());
       Person pOwner = new Person(txtOName.getText(), txtOAddr.getText(), null, ssn);
+      
+      registry.addOwner(pOwner);
     } catch (NumberFormatException e) {
       
     }
@@ -151,15 +178,38 @@ public class Manager extends JFrame {
   
   // * Register company owner
   public void registerCompany() {
-    
+    try {
+      int firmID = Integer.parseInt(txtFirm.getText());
+      Company fOwner = new Company (txtOName.getText(), txtOAddr.getText(), null, firmID);
+      
+      registry.addOwner(fOwner);
+    } catch (NumberFormatException e) {
+      
+    }
   }
   
   public void deleteOwner() {
+    try {
+    int ssn = Integer.parseInt(txtSsn.getText());
+    registry.removeOwner(ssn);
+    }
     
+    catch (NumberFormatException e) {
+      
+    }
   }
   
   public void changeOwner() {
+    try {
+      String regNr = txtCarRegNr.getText();
+      int Ssn = Integer.parseInt(txtSsn.getText());
     
+    registry.changeOwner(regNr,Ssn);
+    }
+    
+    catch (NumberFormatException e) {
+      
+    }
   }
   
   public void showOwner() {
