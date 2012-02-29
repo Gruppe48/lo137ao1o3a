@@ -4,14 +4,16 @@ package oblig1;
 public abstract class AbstractOwner {
   protected String name;
   protected String address;
-  protected Vehicle car;
+  protected Vehicle vehicle;
+  
+  // Iterators
   protected AbstractOwner next;
   protected AbstractOwner previous;
   
-  public AbstractOwner(String n, String a, Vehicle c) {
-    name = n;
-    address = a;
-    car = c;
+  public AbstractOwner(String name, String address, Vehicle vehicle) {
+    this.name = name;
+    this.address = address;
+    this.vehicle = vehicle;
   }
 
   public String getAddress() {
@@ -23,11 +25,11 @@ public abstract class AbstractOwner {
   }
 
   public Vehicle getCar() {
-    return car;
+    return vehicle;
   }
 
   public void setCar(Vehicle car) {
-    this.car = car;
+    this.vehicle = car;
   }
 
   public String getName() {
@@ -58,7 +60,7 @@ public abstract class AbstractOwner {
   
   @Override
   public String toString() {
-    return "Eier:\n " + "Navn: " + name + "\nAdresse: " + address + "\n" + car.toString();
+    return "Eier:\n " + "Navn: " + name + "\nAdresse: " + address + "\n" + vehicle.toString();
   }
 }
 

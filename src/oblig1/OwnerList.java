@@ -11,6 +11,7 @@ public class OwnerList {
     first = null;
   }
   
+  // Double linked list. Not that we use it though, really.
   public void addOwner(AbstractOwner owner) {
     
     if (first == null) {
@@ -28,24 +29,33 @@ public class OwnerList {
       
   }
   
-  public void registerVehicle(String ownerName, Vehicle vehicle) {
-    AbstractOwner owner = find(ownerName);
-    if (owner != null) {
-      
+  public boolean registerVehicle(int ownerID, Vehicle vehicle) {
+    AbstractOwner owner = find(ownerID);
+    if (owner != null && vehicle != null) {
+      // Owner by that name exists and we have a non-null vehicle.
+      if (owner.vehicle == null) {
+        owner.vehicle = vehicle;
+        return true;
+      }
+      else {
+        // already owns a vehicle.
+        return false;
+      }
     }
+    return false;
   }
   
   public String printRegistry() {
-    String res = "";
-    AbstractOwner rOwn = first;
+    String result = "";
+    AbstractOwner current = first;
     
-    while (rOwn != null) {
-      res += rOwn.toString() + "\n";
-      rOwn = rOwn.next;
+    while (current != null) {
+      result += current.toString() + "\n";
+      current = current.next;
     }
     
-    if (!res.equals("")) {
-      return res;
+    if (!result.equals("")) {
+      return result;
     }
     
     else {
@@ -59,12 +69,12 @@ public class OwnerList {
       return false;
     
     AbstractOwner current = first;
-    while(!current.car.getRegNr().equals(regNr)) {
+    while(!current.vehicle.getRegNr().equals(regNr)) {
       if (current.next == null)
         return false;
       current = current.next;
     }
-    current.car = null;
+    current.vehicle = null;
     return true;
   }
   
@@ -78,7 +88,7 @@ public class OwnerList {
         return false;
       current = current.next;
     }
-    if(current.next.car == null) {
+    if(current.next.vehicle == null) {
       current.next = current.next.next;
       return true;
     }
@@ -90,25 +100,57 @@ public class OwnerList {
       return "Registeret er tomt.";
     
     AbstractOwner current = first;
-    while(!current.car.getRegNr().equals(regNr)) {
+    while(!current.vehicle.getRegNr().equals(regNr)) {
       if (current.next == null)
         return "Ingen eier en bil med registreringsnummeret: " + regNr;
       current = current.next;
     }
     return current.toString();
   }
-
-  private AbstractOwner find(String ownerName) {
+  public AbstractOwner getOwner(String regNr) {
     if (first == null)
       return null;
     
     AbstractOwner current = first;
-    while(!current.getName().equals(ownerName)) {
+    while(!current.vehicle.getRegNr().equals(regNr)) {
       if (current.next == null)
         return null;
       current = current.next;
     }
     return current;
+  }
+
+  private AbstractOwner find(int ownerID) {
+    if (first == null)
+      return null;
+    
+    AbstractOwner current = first;
+    while(current.getOwnerID() != ownerID) {
+      if (current.next == null)
+        return null;
+      current = current.next;
+    }
+    return current;
+  }
+  
+  public boolean changeOwner(String regNumber, int ownerID) {
+    AbstractOwner owner = getOwner(regNumber);
+    if (owner != null) {
+      // The vehicle has a owner.
+      AbstractOwner newOwner = find(ownerID);
+      if (newOwner != null) {
+        // The new owner also exists
+        if (newOwner.vehicle == null) {
+          newOwner.vehicle = owner.vehicle;
+        }
+        else {
+          // He already owns a vehicle
+          return false;
+        }
+      }
+    }
+    // The owner is null or the new owner is null.
+    return false;
   }
   
 }
