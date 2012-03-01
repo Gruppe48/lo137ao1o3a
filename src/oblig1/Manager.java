@@ -5,6 +5,17 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 public class Manager extends JFrame {
@@ -17,6 +28,12 @@ public class Manager extends JFrame {
   
   public Manager() {
     super("BilPark");
+    
+    try {
+      load();
+    } catch (IOException ex) {
+      Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+    } 
     
     // Create Textfields
     textSSN      = new JTextField(10);
@@ -95,6 +112,52 @@ public class Manager extends JFrame {
     
     setSize(870, 400);
     setVisible(true);
+    
+    addWindowListener(new WindowAdapter() {
+
+                  @Override
+                  public void windowClosing(WindowEvent e) {
+                    try {
+                      save();
+                      System.out.println("Lagret!");
+                    } catch (IOException ex) {
+                      Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    System.exit(0);
+                  }
+                });
+  }
+  
+  void save() throws IOException {
+    try {
+      /*< Åpne riktig filtype.
+      Gjennomløp lista og skriv objekt for objekt til fil
+      vha skrivObjektTilFil-metoden i Bok-klassen >*/
+      ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("ownerlist.dat"));
+      
+      out.writeObject(registry);
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
+
+  void load() throws IOException {
+    try {
+      /*< Åpne riktig filtype.
+      Gjennomløp lista og skriv objekt for objekt til fil
+      vha skrivObjektTilFil-metoden i Bok-klassen >*/
+      FileInputStream fileHandle = new FileInputStream("ownerlist.dat");
+      ObjectInputStream in = new ObjectInputStream(fileHandle);
+      
+      registry = (OwnerList) in.readObject();
+      
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (ClassNotFoundException ex) {
+      Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (EOFException ex) {
+      System.out.println("Ferdig lastet!");
+    }
   }
   
   private class BtnListener implements ActionListener { 
@@ -130,10 +193,16 @@ public class Manager extends JFrame {
       int regYear = Integer.parseInt(textVehicleRegistrationYear.getText());
       int ssn = Integer.parseInt(textSSN.getText());
       
-      Vehicle v = new Vehicle(regNumber,make,model,regYear);
-      registry.registerVehicle(ssn, v);
+      if (!regNumber.equals("") && !make.equals("") && !model.equals("")) {
+        Vehicle v = new Vehicle(regNumber,make,model,regYear);
+        registry.registerVehicle(ssn, v);
+      }
+      else {
+        display.setText("Noen felter er tomme!");
+      }
       
     } catch (NumberFormatException e) {
+      display.setText("Noen felter er tomme!");
     }
 
   }
@@ -146,10 +215,16 @@ public class Manager extends JFrame {
       int regYear = Integer.parseInt(textVehicleRegistrationYear.getText());
       int firmID = Integer.parseInt(textCompanyName.getText());
       
-      Vehicle v = new Vehicle(regNumber,make,model,regYear);
-      registry.registerVehicle(firmID, v);
+      if (!regNumber.equals("") && !make.equals("") && !model.equals("")) {
+        Vehicle v = new Vehicle(regNumber,make,model,regYear);
+        registry.registerVehicle(firmID, v);
+      }
+      else {
+        display.setText("Noen felter er tomme!");
+      }
       
     } catch (NumberFormatException e) {
+      display.setText("Noen felter er tomme!");
     }
 
   }
@@ -157,22 +232,33 @@ public class Manager extends JFrame {
   public void deleteVehicle() {
     String regNr = textVehicleRegNumber.getText();
     
-    if(registry.removeVehicle(regNr))
-      display.setText("Bilen: " + regNr + " er nå slettet\n");
-    else
-      display.setText("Bilen: " + regNr + " kan ikke slettes."
-              + "Enten finnes den ikke, eller så er det noen som eier den");
+    if (!regNr.equals("")) {
+      if(registry.removeVehicle(regNr)) {
+        display.setText("Bilen: " + regNr + " er nå slettet\n");
+      }
+      else {
+        display.setText("Bilen: " + regNr + " kan ikke slettes."
+                + "Enten finnes den ikke, eller så er det noen som eier den");
+      }
+    }
   }
   
   // * Register private owner
   public void registerPerson() {
     try {
       int ssn = Integer.parseInt(textSSN.getText());
-      Person pOwner = new Person(textOwnerName.getText(), textOwnerAddress.getText(), null, ssn);
+      String ownerName = textOwnerName.getText();
+      String address = textOwnerAddress.getText();
       
-      registry.addOwner(pOwner);
+      if (!ownerName.equals("") && !address.equals("")) {
+        Person owner = new Person(ownerName, address, null, ssn);
+        registry.addOwner(owner);
+      }
+      else {
+        display.setText("Noen felter er tomme!");
+      }
     } catch (NumberFormatException e) {
-      
+      display.setText("Noen felter er tomme!");
     }
   }
   
@@ -180,22 +266,35 @@ public class Manager extends JFrame {
   public void registerCompany() {
     try {
       int firmID = Integer.parseInt(textCompanyName.getText());
-      Company owner = new Company (textOwnerName.getText(), textOwnerAddress.getText(), null, firmID);
+      String companyName = textOwnerName.getText();
+      String address = textOwnerAddress.getText();
       
-      registry.addOwner(owner);
+      if (!companyName.equals("") && !address.equals("")) {
+        Company owner = new Company (companyName, address, null, firmID);
+      
+        registry.addOwner(owner);
+      }
+      else {
+        display.setText("Noen felter er tomme!");
+      }
     } catch (NumberFormatException e) {
-      
+      display.setText("Noen felter er tomme!");
     }
   }
   
   public void deleteOwner() {
     try {
-    int ssn = Integer.parseInt(textSSN.getText());
-    registry.removeOwner(ssn);
+      int ssn = Integer.parseInt(textSSN.getText());
+      if (registry.removeOwner(ssn)) {
+        display.setText("Eier har blitt slettet.");
+      }
+      else {
+        display.setText("Eier har ikke blitt slettet for de eier et kjøretøy.");
+      }
     }
     
     catch (NumberFormatException e) {
-      
+      display.setText("Noen felter er tomme!");
     }
   }
   
@@ -203,18 +302,29 @@ public class Manager extends JFrame {
     try {
       String regNr = textVehicleRegNumber.getText();
       int Ssn = Integer.parseInt(textSSN.getText());
-    
-    registry.changeOwner(regNr,Ssn);
+      
+      if (!regNr.equals("")) {
+        registry.changeOwner(regNr,Ssn);
+      }
+      else {
+        display.setText("Noen felter er tomme!");
+      }
     }
     
     catch (NumberFormatException e) {
-      
+      display.setText("Noen felter er tomme!");
     }
   }
   
   public void showOwner() {
-    String owner = registry.findOwner(textVehicleRegNumber.getText());
-    display.setText(owner);
+    String regNumber = textVehicleRegNumber.getText();
+    if (!regNumber.equals("")) {
+      String result = registry.findOwner(regNumber);
+      display.setText(result);
+    }
+    else {
+      display.setText("Noen felter er tomme!");
+    }
   }
   
   public void showAll() {

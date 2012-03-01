@@ -2,8 +2,10 @@
 
 package oblig1;
 
+import java.io.Serializable;
 
-public class OwnerList {
+
+public class OwnerList implements Serializable {
   
   private AbstractOwner first;
   
@@ -24,7 +26,7 @@ public class OwnerList {
         current = current.next;
       }
       current.next = owner;
-      current.next.previous = current;     
+      current.next.previous = current;    
     }
       
   }
@@ -69,7 +71,7 @@ public class OwnerList {
       return false;
     
     AbstractOwner current = first;
-    while(!current.vehicle.getRegNr().equals(regNr)) {
+    while(current != null && !current.vehicle.getRegNr().equals(regNr)) {
       if (current.next == null)
         return false;
       current = current.next;
@@ -83,12 +85,12 @@ public class OwnerList {
       return false;
     
     AbstractOwner current = first;
-    while(current.next.getOwnerID() != ownerID) {
+    while(current != null && current.next != null && current.next.getOwnerID() != ownerID) {
       if (current.next.next == null)
         return false;
       current = current.next;
     }
-    if(current.next.vehicle == null) {
+    if(current.next != null && current.next.vehicle == null) {
       current.next = current.next.next;
       return true;
     }
@@ -100,7 +102,7 @@ public class OwnerList {
       return "Registeret er tomt.";
     
     AbstractOwner current = first;
-    while(!current.vehicle.getRegNr().equals(regNr)) {
+    while(current != null && current.vehicle != null && !current.vehicle.getRegNr().equals(regNr)) {
       if (current.next == null)
         return "Ingen eier en bil med registreringsnummeret: " + regNr;
       current = current.next;
@@ -112,7 +114,7 @@ public class OwnerList {
       return null;
     
     AbstractOwner current = first;
-    while(!current.vehicle.getRegNr().equals(regNr)) {
+    while(current != null && !current.vehicle.getRegNr().equals(regNr)) {
       if (current.next == null)
         return null;
       current = current.next;
@@ -125,7 +127,7 @@ public class OwnerList {
       return null;
     
     AbstractOwner current = first;
-    while(current.getOwnerID() != ownerID) {
+    while(current != null && current.getOwnerID() != ownerID) {
       if (current.next == null)
         return null;
       current = current.next;

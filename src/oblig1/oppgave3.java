@@ -16,11 +16,5 @@ public class oppgave3 {
    */
   public static void main(String[] args) {
     Manager gui = new Manager();
-    gui.addWindowListener(
-            new WindowAdapter() {
-              public void WindowClosing(WindowEvent e) {
-                System.exit(0);
-              }
-            });
   }
 }

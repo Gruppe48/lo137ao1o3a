@@ -1,7 +1,9 @@
 
 package oblig1;
 
-public class Vehicle {
+import java.io.Serializable;
+
+public class Vehicle implements Serializable {
   private String regNbr;  // registration number
   private String make; // Vehicle make (Toyota, Ford, and so on)
   private String model; // Model, obviously.

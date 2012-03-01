@@ -1,7 +1,9 @@
 
 package oblig1;
 
-public abstract class AbstractOwner {
+import java.io.Serializable;
+
+public abstract class AbstractOwner implements Serializable {
   protected String name;
   protected String address;
   protected Vehicle vehicle;
@@ -60,7 +62,7 @@ public abstract class AbstractOwner {
   
   @Override
   public String toString() {
-    return "Eier:\n " + "Navn: " + name + "\nAdresse: " + address + "\n" + vehicle.toString();
+    return "Eier:\n " + "Navn: " + name + "\nAdresse: " + address + "\n";
   }
 }
 

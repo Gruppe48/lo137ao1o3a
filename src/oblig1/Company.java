@@ -9,21 +9,21 @@ package oblig1;
  * @date Feb 28, 2012
  */
 class Company extends AbstractOwner {
-  protected int cnbr; //Company number
+  protected int companyID; //Company number
   
   public Company (String n, String a, Vehicle c, int cn ) {
     super (n,a,c);
-    cnbr = cn;
+    companyID = cn;
   }
   
   @Override
   public int getOwnerID() {
-    return cnbr;
+    return companyID;
   }
   
   @Override
   public String toString() {
-    return super.toString() + "CompanyID: " + cnbr + vehicle.toString();
+    return super.toString() + "CompanyID: " + companyID;
     
   }
 }
