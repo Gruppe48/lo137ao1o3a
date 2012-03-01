@@ -14,34 +14,66 @@ public class OwnerList implements Serializable {
   }
   
   // Double linked list. Not that we use it though, really.
-  public void addOwner(AbstractOwner owner) {
+  public boolean addOwner(AbstractOwner owner) {
     
-    if (first == null) {
-      first = owner;
-    }
-    
-    else {
-      AbstractOwner current = first;
-      while (current.next != null) {
-        current = current.next;
-      }
-      current.next = owner;
-      current.next.previous = current;    
-    }
-      
-  }
-  
-  public boolean registerVehicle(int ownerID, Vehicle vehicle) {
-    AbstractOwner owner = find(ownerID);
-    if (owner != null && vehicle != null) {
-      // Owner by that name exists and we have a non-null vehicle.
-      if (owner.vehicle == null) {
-        owner.vehicle = vehicle;
+    if (!ownerExists(owner.getOwnerID())) {
+      if (first == null) {
+        first = owner;
         return true;
       }
+
       else {
-        // already owns a vehicle.
+        AbstractOwner current = first;
+        while (current.next != null) {
+          current = current.next;
+        }
+        current.next = owner;
+        current.next.previous = current;
+        return true;
+      }
+    }
+    return false;
+  }
+  public boolean vehicleExists(String regNr) {
+     if (first == null)
+      return false;
+    
+    AbstractOwner current = first;
+    while(current != null) {
+      if (current.next == null)
         return false;
+      if (current.vehicle != null) {
+        if (current.vehicle.getRegNr().equals(regNr)) {
+          return true;
+        }
+      }
+      current = current.next;    
+    }
+    return false; 
+  }
+  public boolean ownerExists(int ownerID) {
+    AbstractOwner owner = find(ownerID);
+    if (owner != null) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  public boolean registerVehicle(int ownerID, Vehicle vehicle) {
+    if (!vehicleExists(vehicle.getRegNr())) {
+      
+      AbstractOwner owner = find(ownerID);
+      if (owner != null && vehicle != null) {
+        // Owner by that name exists and we have a non-null vehicle.
+        if (owner.vehicle == null) {
+          owner.vehicle = vehicle;
+          return true;
+        }
+        else {
+          // already owns a vehicle.
+          return false;
+        }
       }
     }
     return false;
@@ -71,12 +103,13 @@ public class OwnerList implements Serializable {
       return false;
     
     AbstractOwner current = first;
-    while(current != null && !current.vehicle.getRegNr().equals(regNr)) {
+    while(current != null && current.vehicle != null && !current.vehicle.getRegNr().equals(regNr)) {
       if (current.next == null)
         return false;
       current = current.next;
     }
-    current.vehicle = null;
+    System.out.println("Current owner:" + current.getName());
+    current.setVehicle(null);
     return true;
   }
   
@@ -85,41 +118,49 @@ public class OwnerList implements Serializable {
       return false;
     
     AbstractOwner current = first;
-    while(current != null && current.next != null && current.next.getOwnerID() != ownerID) {
-      if (current.next.next == null)
-        return false;
+    while(current != null) {
+      if (current.next.getOwnerID() == ownerID) {
+        if (current.next.next != null) {
+          current.next = current.next.next;
+          
+                  
+        }
+        else {
+          current = null;
+          first = null;
+        }
+      } 
       current = current.next;
     }
-    if(current.next != null && current.next.vehicle == null) {
-      current.next = current.next.next;
-      return true;
-    }
-    return false;
   }
+  
   
   public String findOwner(String regNr) {
     if (first == null)
       return "Registeret er tomt.";
     
     AbstractOwner current = first;
-    while(current != null && current.vehicle != null && !current.vehicle.getRegNr().equals(regNr)) {
-      if (current.next == null)
-        return "Ingen eier en bil med registreringsnummeret: " + regNr;
+    while(current != null) {
+      if (current.vehicle != null && current.vehicle.getRegNr().equals(regNr)) {
+        return current.toString();
+      }
       current = current.next;
+      
     }
-    return current.toString();
+    return "Dette kjøretøyet finnes ikke.";
   }
   public AbstractOwner getOwner(String regNr) {
     if (first == null)
       return null;
     
     AbstractOwner current = first;
-    while(current != null && !current.vehicle.getRegNr().equals(regNr)) {
-      if (current.next == null)
-        return null;
+    while(current != null) {
+      if (current.vehicle != null && current.vehicle.getRegNr().equals(regNr)) {
+        return current;
+      }
       current = current.next;
     }
-    return current;
+    return null;
   }
 
   private AbstractOwner find(int ownerID) {

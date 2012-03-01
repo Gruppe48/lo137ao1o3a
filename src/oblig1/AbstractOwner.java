@@ -26,11 +26,11 @@ public abstract class AbstractOwner implements Serializable {
     this.address = address;
   }
 
-  public Vehicle getCar() {
+  public Vehicle getVehicle() {
     return vehicle;
   }
 
-  public void setCar(Vehicle car) {
+  public void setVehicle(Vehicle car) {
     this.vehicle = car;
   }
 

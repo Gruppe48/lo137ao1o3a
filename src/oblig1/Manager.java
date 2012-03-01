@@ -147,12 +147,13 @@ public class Manager extends JFrame {
       Gjennomløp lista og skriv objekt for objekt til fil
       vha skrivObjektTilFil-metoden i Bok-klassen >*/
       FileInputStream fileHandle = new FileInputStream("ownerlist.dat");
+      
       ObjectInputStream in = new ObjectInputStream(fileHandle);
       
       registry = (OwnerList) in.readObject();
       
     } catch (FileNotFoundException ex) {
-      Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+      System.out.println("Filen finnes ikke, oppretter!");
     } catch (ClassNotFoundException ex) {
       Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
     } catch (EOFException ex) {
@@ -195,7 +196,12 @@ public class Manager extends JFrame {
       
       if (!regNumber.equals("") && !make.equals("") && !model.equals("")) {
         Vehicle v = new Vehicle(regNumber,make,model,regYear);
-        registry.registerVehicle(ssn, v);
+        if (registry.registerVehicle(ssn, v)) {
+          display.setText("Kjøretøy registert!");
+        }
+        else {
+          display.setText("Kjøretøyet kunne ikke registeres fordi det finnes et kjøretøy med samme regNr");
+        }
       }
       else {
         display.setText("Noen felter er tomme!");
@@ -217,7 +223,12 @@ public class Manager extends JFrame {
       
       if (!regNumber.equals("") && !make.equals("") && !model.equals("")) {
         Vehicle v = new Vehicle(regNumber,make,model,regYear);
-        registry.registerVehicle(firmID, v);
+        if (registry.registerVehicle(firmID, v)) {
+          display.setText("Kjøretøy registert!");
+        }
+        else {
+          display.setText("Kjøretøyet kunne ikke registeres fordi det finnes et kjøretøy med samme regNr");
+        }
       }
       else {
         display.setText("Noen felter er tomme!");
@@ -252,7 +263,12 @@ public class Manager extends JFrame {
       
       if (!ownerName.equals("") && !address.equals("")) {
         Person owner = new Person(ownerName, address, null, ssn);
-        registry.addOwner(owner);
+        if (registry.addOwner(owner)) {
+          display.setText("Eier registert!");
+        }
+        else {
+          display.setText("Det finnes en eier med samme ID fra før! Vennligst benytt et annet ID");
+        }
       }
       else {
         display.setText("Noen felter er tomme!");
@@ -272,7 +288,12 @@ public class Manager extends JFrame {
       if (!companyName.equals("") && !address.equals("")) {
         Company owner = new Company (companyName, address, null, firmID);
       
-        registry.addOwner(owner);
+        if (registry.addOwner(owner)) {
+          display.setText("Eier registert!");
+        }
+        else {
+          display.setText("Det finnes en eier med samme ID fra før! Vennligst benytt et annet ID");
+        }
       }
       else {
         display.setText("Noen felter er tomme!");

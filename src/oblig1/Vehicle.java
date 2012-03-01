@@ -7,13 +7,13 @@ public class Vehicle implements Serializable {
   private String regNbr;  // registration number
   private String make; // Vehicle make (Toyota, Ford, and so on)
   private String model; // Model, obviously.
-  private int regyear; // First time registered.
+  private int regYear; // First time registered.
   
   public Vehicle (String regNumber, String make, String model, int regYear) {
     this.regNbr = regNumber;
     this.make = make;
     this.model = model;
-    this.regyear = regYear;
+    this.regYear = regYear;
   }
   
   public String getMake() {
@@ -25,7 +25,7 @@ public class Vehicle implements Serializable {
   }
 
   public int getRegyear() {
-    return regyear;
+    return regYear;
   }
   
   public String getRegNr() {
@@ -45,14 +45,14 @@ public class Vehicle implements Serializable {
   }
 
   public void setRegyear(int regyear) {
-    this.regyear = regyear;
+    this.regYear = regyear;
   }
   
   
   @Override
   public String toString() {
     return "RegNr:" + regNbr + "\nModell:" + make + " " + model +  "\nÅr: " 
-            + regyear + "\n";
+            + regYear + "\n";
   }
   
   
