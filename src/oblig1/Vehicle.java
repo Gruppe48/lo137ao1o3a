@@ -51,7 +51,7 @@ public class Vehicle implements Serializable {
   
   @Override
   public String toString() {
-    return "RegNr:" + regNbr + "\nModell:" + make + " " + model +  "\nÅr: " 
+    return "RegNr: " + regNbr + "\nModell: " + make + " " + model +  "\nÅr: " 
             + regYear + "\n";
   }
   
