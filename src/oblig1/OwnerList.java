@@ -113,25 +113,41 @@ public class OwnerList implements Serializable {
     return true;
   }
   
-  public boolean removeOwner(int ownerID) {
-    if (first == null)
-      return false;
+  public int removeOwner(int ownerID) {
+    final int SUCCESS       = 1;  // Returns 1 on success
+    final int UNKNOWN       = 0;  // Returns 0 if ownerID doesn't exists
+    final int HAS_WEHIACLE  = -1; // Returns -1 if owner do have a vehicle
+    final int EMPTY_LIST    = -2; // Returns -2 if the list of owners is empty   
     
-    AbstractOwner current = first;
-    while(current != null) {
-      if (current.next.getOwnerID() == ownerID) {
-        if (current.next.next != null) {
-          current.next = current.next.next;
-          
-                  
-        }
-        else {
-          current = null;
-          first = null;
-        }
-      } 
-      current = current.next;
+    if (first == null)
+      return EMPTY_LIST;
+    
+    if(ownerID == first.getOwnerID()) {
+      if(first.vehicle == null ) {
+        first = first.next;
+        return SUCCESS;
+      }
+      else
+        return HAS_WEHIACLE;
     }
+    else {
+      AbstractOwner current = first;
+      while(current.next != null) {
+        if(current.next.getOwnerID() == ownerID) {
+          if(current.next.vehicle == null) {
+            if(current.next.next != null) {
+              current.next = current.next.next;
+              return SUCCESS;
+            }
+            current.next = null;
+            return SUCCESS;
+          }
+          return HAS_WEHIACLE;
+        }
+        current.next = current.next.next;
+      }
+    }
+    return UNKNOWN;
   }
   
   
