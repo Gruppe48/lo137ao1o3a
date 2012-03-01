@@ -306,11 +306,16 @@ public class Manager extends JFrame {
   public void deleteOwner() {
     try {
       int ssn = Integer.parseInt(textSSN.getText());
-      if (registry.removeOwner(ssn)) {
-        display.setText("Eier har blitt slettet.");
-      }
-      else {
-        display.setText("Eier har ikke blitt slettet for de eier et kjøretøy.");
+      int status = registry.removeOwner(ssn);
+      switch(status) {
+        case 1: display.setText("Eieren er nå fjernet.");
+          break;
+        case 0: display.setText("Eier finnes ikke.");
+          break;
+        case -1: display.setText("Kan ikke slette eier fordi han eier et kjøretøy.");
+          break;
+        case -2: display.setText("Lista er tom, så det er ingen eiere å slette.");
+          break;
       }
     }
     
