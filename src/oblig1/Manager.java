@@ -144,7 +144,7 @@ public class Manager extends JFrame {
     }
   }
 
-  void load() throws IOException {
+  private void load() throws IOException {
     try {
       /*< Åpne riktig filtype.
       Gjennomløp lista og skriv objekt for objekt til fil
