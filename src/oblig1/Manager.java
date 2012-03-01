@@ -19,9 +19,10 @@ import java.util.logging.Logger;
 import javax.swing.*;
 
 public class Manager extends JFrame {
-  JTextField textSSN, textCompanyName, textOwnerName, textOwnerAddress;
+  JRadioButton rbPerson, rbCompany;
+  JTextField textOwnerID, textOwnerName, textOwnerAddress;
   JTextField textVehicleRegNumber, textVehicleMake, textVehicleModel, textVehicleRegistrationYear;
-  JButton buttonRegisterPerson,buttonRegisterCompany, buttonDeleteVehicle, buttonRegisterPersonalOwner, buttonRegisterCompanyOwner, buttonDeleteOwner, buttonChangeOwner, buttonShowAll, buttonShowOwner;
+  JButton buttonRegisterVehiacle, buttonRegisterOwner, buttonDeleteVehicle, buttonDeleteOwner, buttonChangeOwner, buttonShowAll, buttonShowOwner;
   JTextArea display;
   
   OwnerList registry = new OwnerList();
@@ -35,27 +36,31 @@ public class Manager extends JFrame {
       Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
     } 
     
+    // Create RadioButtons
+    rbPerson  = new JRadioButton("Privat");
+    rbCompany = new JRadioButton("Firma");
+    ButtonGroup rbGroup = new ButtonGroup();
+    rbGroup.add(rbPerson);
+    rbGroup.add(rbCompany);
+   
     // Create Textfields
-    textSSN      = new JTextField(10);
-    textCompanyName     = new JTextField(10);
+    textOwnerID      = new JTextField(10);
     textOwnerName    = new JTextField(10);
-    textOwnerAddress    = new JTextField(10);
+    textOwnerAddress = new JTextField(10);
     
-    textVehicleRegNumber = new JTextField(10);
-    textVehicleMake  = new JTextField(10);
-    textVehicleModel = new JTextField(10);
-    textVehicleRegistrationYear    = new JTextField(4);
+    textVehicleRegNumber        = new JTextField(10);
+    textVehicleMake             = new JTextField(10);
+    textVehicleModel            = new JTextField(10);
+    textVehicleRegistrationYear = new JTextField(4);
     
     // Create Buttons
-    buttonRegisterPerson = new JButton("Reg priv. bil");
-    buttonRegisterCompany    = new JButton("Reg firmabil");
-    buttonDeleteVehicle      = new JButton("Slett bil");
-    buttonRegisterPersonalOwner   = new JButton("Reg priv.eier");
-    buttonRegisterCompanyOwner   = new JButton("Reg firmaeier");
-    buttonDeleteOwner    = new JButton("Slett eier");
-    buttonChangeOwner = new JButton("Skift eier");
-    buttonShowOwner   = new JButton("Vis eier");
-    buttonShowAll     = new JButton("Vis alle");
+    buttonRegisterVehiacle      = new JButton("Reg bil");
+    buttonRegisterOwner         = new JButton("Reg eier");
+    buttonDeleteVehicle         = new JButton("Slett bil");
+    buttonDeleteOwner           = new JButton("Slett eier");
+    buttonChangeOwner           = new JButton("Skift eier");
+    buttonShowOwner             = new JButton("Vis eier");
+    buttonShowAll               = new JButton("Vis alle");
     
     // Create Display area
     display = new JTextArea(15, 45);
@@ -64,11 +69,9 @@ public class Manager extends JFrame {
     
     // Add ActionListeners
     BtnListener listener = new BtnListener();
-    buttonRegisterPerson.addActionListener(listener);
-    buttonRegisterCompany.addActionListener(listener);
+    buttonRegisterVehiacle.addActionListener(listener);
+    buttonRegisterOwner.addActionListener(listener);
     buttonDeleteVehicle.addActionListener(listener);
-    buttonRegisterPersonalOwner.addActionListener(listener);
-    buttonRegisterCompanyOwner.addActionListener(listener);
     buttonDeleteOwner.addActionListener(listener);
     buttonChangeOwner.addActionListener(listener);
     buttonShowOwner.addActionListener(listener);
@@ -78,11 +81,13 @@ public class Manager extends JFrame {
     Container c = getContentPane();
     c.setLayout( new FlowLayout() );
     
+    // Add RadioButtons
+    c.add(rbPerson);
+    c.add(rbCompany);
+    
     // Add TextFields
-    c.add(new JLabel("PersonNr:"));
-    c.add(textSSN);
-    c.add(new JLabel("FirmaID:"));
-    c.add(textCompanyName);
+    c.add(new JLabel("EierID:"));
+    c.add(textOwnerID);
     c.add(new JLabel("Eier Navn:"));
     c.add(textOwnerName);
     c.add(new JLabel("Eier Adresse:"));
@@ -97,11 +102,9 @@ public class Manager extends JFrame {
     c.add(textVehicleRegistrationYear);
     
     // Add Buttons
-    c.add(buttonRegisterPerson);
-    c.add(buttonRegisterCompany);
+    c.add(buttonRegisterVehiacle);
     c.add(buttonDeleteVehicle);
-    c.add(buttonRegisterPersonalOwner);
-    c.add(buttonRegisterCompanyOwner);
+    c.add(buttonRegisterOwner);
     c.add(buttonDeleteOwner);
     c.add(buttonChangeOwner);
     c.add(buttonShowOwner);
@@ -165,16 +168,22 @@ public class Manager extends JFrame {
     @Override
     public void actionPerformed(ActionEvent e) {
       
-      if(e.getSource() == buttonRegisterPerson)
-        registerVehiclePrivate();
-      else if (e.getSource() == buttonRegisterCompany)
-        registerVehicleCompany();
+      if(e.getSource() == buttonRegisterVehiacle) {
+        int rbStatus = checkRadioButtons();
+        if(rbStatus == PRIVATE)
+          registerVehiclePrivate();
+        else if (rbStatus == COMPANY)
+          registerVehicleCompany();
+      }
       else if (e.getSource() == buttonDeleteVehicle)
         deleteVehicle();
-      else if (e.getSource() == buttonRegisterPersonalOwner)
-        registerPerson();
-      else if (e.getSource() == buttonRegisterCompanyOwner)
-        registerCompany();
+      else if (e.getSource() == buttonRegisterOwner) {
+        int rbStatus = checkRadioButtons();
+        if(rbStatus == PRIVATE)
+          registerPerson();
+        else if (rbStatus == COMPANY)
+          registerCompany();
+      }
       else if (e.getSource() == buttonDeleteOwner)
         deleteOwner();
       else if (e.getSource() == buttonChangeOwner)
@@ -192,11 +201,11 @@ public class Manager extends JFrame {
       String make = textVehicleMake.getText();
       String model = textVehicleModel.getText();
       int regYear = Integer.parseInt(textVehicleRegistrationYear.getText());
-      int ssn = Integer.parseInt(textSSN.getText());
+      int ownerID = Integer.parseInt(textOwnerID.getText());
       
       if (!regNumber.equals("") && !make.equals("") && !model.equals("")) {
         Vehicle v = new Vehicle(regNumber,make,model,regYear);
-        if (registry.registerVehicle(ssn, v)) {
+        if (registry.registerVehicle(ownerID, v)) {
           display.setText("Kjøretøy registert!");
         }
         else {
@@ -215,15 +224,17 @@ public class Manager extends JFrame {
   
   public void registerVehicleCompany() {
     try {
-      String regNumber = textVehicleRegNumber.getText();
-      String make = textVehicleMake.getText();
-      String model = textVehicleModel.getText();
-      int regYear = Integer.parseInt(textVehicleRegistrationYear.getText());
-      int firmID = Integer.parseInt(textCompanyName.getText());
+      int ownerID = Integer.parseInt(textOwnerID.getText());
+      
+      String regNumber  = textVehicleRegNumber.getText();
+      String make       = textVehicleMake.getText();
+      String model      = textVehicleModel.getText();
+      int regYear       = Integer.parseInt(textVehicleRegistrationYear.getText());
+      
       
       if (!regNumber.equals("") && !make.equals("") && !model.equals("")) {
         Vehicle v = new Vehicle(regNumber,make,model,regYear);
-        if (registry.registerVehicle(firmID, v)) {
+        if (registry.registerVehicle(ownerID, v)) {
           display.setText("Kjøretøy registert!");
         }
         else {
@@ -257,12 +268,12 @@ public class Manager extends JFrame {
   // * Register private owner
   public void registerPerson() {
     try {
-      int ssn = Integer.parseInt(textSSN.getText());
+      int ownerID = Integer.parseInt(textOwnerID.getText());
       String ownerName = textOwnerName.getText();
       String address = textOwnerAddress.getText();
       
       if (!ownerName.equals("") && !address.equals("")) {
-        Person owner = new Person(ownerName, address, null, ssn);
+        Person owner = new Person(ownerName, address, null, ownerID);
         if (registry.addOwner(owner)) {
           display.setText("Eier registert!");
         }
@@ -281,12 +292,12 @@ public class Manager extends JFrame {
   // * Register company owner
   public void registerCompany() {
     try {
-      int firmID = Integer.parseInt(textCompanyName.getText());
+      int ownerID = Integer.parseInt(textOwnerID.getText());  
       String companyName = textOwnerName.getText();
       String address = textOwnerAddress.getText();
       
       if (!companyName.equals("") && !address.equals("")) {
-        Company owner = new Company (companyName, address, null, firmID);
+        Company owner = new Company (companyName, address, null, ownerID);
       
         if (registry.addOwner(owner)) {
           display.setText("Eier registert!");
@@ -305,8 +316,8 @@ public class Manager extends JFrame {
   
   public void deleteOwner() {
     try {
-      int ssn = Integer.parseInt(textSSN.getText());
-      int status = registry.removeOwner(ssn);
+      int ownerID = Integer.parseInt(textOwnerID.getText());
+      int status = registry.removeOwner(ownerID);
       switch(status) {
         case 1: display.setText("Eieren er nå fjernet.");
           break;
@@ -323,20 +334,20 @@ public class Manager extends JFrame {
       display.setText("Noen felter er tomme!");
     }
   }
-  
+          
+          
   public void changeOwner() {
     try {
+      int ownerID = Integer.parseInt(textOwnerID.getText());
       String regNr = textVehicleRegNumber.getText();
-      int Ssn = Integer.parseInt(textSSN.getText());
       
       if (!regNr.equals("")) {
-        registry.changeOwner(regNr,Ssn);
+        registry.changeOwner(regNr,ownerID);
       }
       else {
         display.setText("Noen felter er tomme!");
       }
     }
-    
     catch (NumberFormatException e) {
       display.setText("Noen felter er tomme!");
     }
@@ -356,5 +367,17 @@ public class Manager extends JFrame {
   public void showAll() {
     display.setText(registry.printRegistry());
   }
+ 
+  public static final int NON_SELECTED = -1;
+  public static final int PRIVATE      = 1;
+  public static final int COMPANY      = 2;
   
+  public int checkRadioButtons() { 
+    if(rbPerson.isSelected())
+      return PRIVATE;
+    else if (rbCompany.isSelected())
+      return COMPANY;
+    display.setText("Du må velge privat- eller firmaeier");
+    return NON_SELECTED;
+  }
 }
