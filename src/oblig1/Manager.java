@@ -27,6 +27,10 @@ public class Manager extends JFrame {
   
   OwnerList registry = new OwnerList();
   
+  public static final int NON_SELECTED = -1;
+  public static final int PRIVATE      = 1;
+  public static final int COMPANY      = 2;
+  
   public Manager() {
     super("BilPark");
     
@@ -170,28 +174,37 @@ public class Manager extends JFrame {
       
       if(e.getSource() == buttonRegisterVehiacle) {
         int rbStatus = checkRadioButtons();
-        if(rbStatus == PRIVATE)
+        if(rbStatus == PRIVATE) {
           registerVehiclePrivate();
-        else if (rbStatus == COMPANY)
+        }
+        else if (rbStatus == COMPANY) {
           registerVehicleCompany();
+        }
       }
-      else if (e.getSource() == buttonDeleteVehicle)
+      else if (e.getSource() == buttonDeleteVehicle) {
         deleteVehicle();
+      }
       else if (e.getSource() == buttonRegisterOwner) {
         int rbStatus = checkRadioButtons();
-        if(rbStatus == PRIVATE)
+        if(rbStatus == PRIVATE) {
           registerPerson();
-        else if (rbStatus == COMPANY)
+        }
+        else if (rbStatus == COMPANY) {
           registerCompany();
+        }
       }
-      else if (e.getSource() == buttonDeleteOwner)
+      else if (e.getSource() == buttonDeleteOwner) {
         deleteOwner();
-      else if (e.getSource() == buttonChangeOwner)
+      }
+      else if (e.getSource() == buttonChangeOwner) {
         changeOwner();
-      else if (e.getSource() == buttonShowOwner)
+      }
+      else if (e.getSource() == buttonShowOwner) {
         showOwner();
-      else if (e.getSource() == buttonShowAll)
+      }
+      else if (e.getSource() == buttonShowAll) {
         showAll();
+      }
     }
   }
   
@@ -343,6 +356,7 @@ public class Manager extends JFrame {
       
       if (!regNr.equals("")) {
         registry.changeOwner(regNr,ownerID);
+        display.setText("Kjøretøyet har blitt flyttet!");
       }
       else {
         display.setText("Noen felter er tomme!");
@@ -367,16 +381,15 @@ public class Manager extends JFrame {
   public void showAll() {
     display.setText(registry.printRegistry());
   }
- 
-  public static final int NON_SELECTED = -1;
-  public static final int PRIVATE      = 1;
-  public static final int COMPANY      = 2;
+
   
   public int checkRadioButtons() { 
-    if(rbPerson.isSelected())
+    if(rbPerson.isSelected()) {
       return PRIVATE;
-    else if (rbCompany.isSelected())
+    }
+    else if (rbCompany.isSelected()) {
       return COMPANY;
+    }
     display.setText("Du må velge privat- eller firmaeier");
     return NON_SELECTED;
   }
