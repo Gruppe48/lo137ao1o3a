@@ -23,7 +23,7 @@ class Company extends AbstractOwner {
   
   @Override
   public String toString() {
-    String res = super.toString() + "Firma nummer: " + companyID;
+    String res = super.toString() + "Firma nummer: " + companyID + "\n";
     if (vehicle != null) {
       res += vehicle.toString();
     }

@@ -201,6 +201,7 @@ public class OwnerList implements Serializable {
         // The new owner also exists
         if (newOwner.vehicle == null) {
           newOwner.vehicle = owner.vehicle;
+          owner.vehicle = null;
         }
         else {
           // He already owns a vehicle
