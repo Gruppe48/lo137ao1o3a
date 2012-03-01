@@ -24,7 +24,11 @@ class Person extends AbstractOwner {
   
   @Override
   public String toString() {
-    return super.toString() + "Personnr: " + ssn;
+    String res = super.toString() + "Personnr: " + ssn + "\n";
+    if (vehicle != null) {
+      res += "Bil:\n" + vehicle.toString();
+    }
+    return res;  
   }
   
 }
